@@ -1,0 +1,44 @@
+{
+  "name": "cambium",
+  "version": "1.0.0",
+  "description": "To display a list of repos belonging to a particular GitHub handle, through APIs.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec babel-node index.js",
+    "prepare": "husky install",
+    "lint": "eslint '**/*.js' "
+  },
+  "keywords": [
+    "GitHub",
+    "repo",
+    "fetch",
+    "GitHub",
+    "API's"
+  ],
+  "author": "shubham kaushalya",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "babel-preset-airbnb": "^5.0.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.2",
+    "mongoose": "^6.1.4",
+    "octokit": "^1.7.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.5",
+    "@babel/node": "^7.16.5",
+    "@babel/preset-env": "^7.16.5",
+    "eslint": "^8.5.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-node": "^4.1.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.5.1"
+  }
+}
