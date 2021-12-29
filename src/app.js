@@ -1,5 +1,4 @@
 import express from 'express';
-import { Octokit } from 'octokit';
 import axios from 'axios';
 import dbConnection from './db/config/dbconnection';
 import connectionDetails from '../index';
