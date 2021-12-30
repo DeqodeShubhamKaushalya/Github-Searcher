@@ -1,7 +1,8 @@
 import express from 'express';
-import axios from 'axios';
+import { of } from 'await-of';
 import dbConnection from './db/config/dbconnection';
 import connectionDetails from '../index';
+import GithubSearchRepository from './dl/dao/GithubSearchRepository.dao';
 
 const app = express();
 
@@ -9,68 +10,160 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.post('/api/repo-handler', async (req, res) => {
+app.post('/api/users/:handle/repositories', async (req, res) => {
   try {
-    const { handle } = req.body;
+    const { handle } = req.params;
 
     if (!handle) {
-      res.send({
+      res.status(400).send({
         success: false,
-        status_code: 400,
         error: {
           message: 'handle is required.',
         },
       });
     }
 
-    const handleDetails = await axios.get(
-      `https://api.github.com/search/users?q=${handle}`,
-      {
-        headers: {
-          Authorization: 'token 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',
-        },
-      },
+    const [handler, hanlderErr] = await of(
+      GithubSearchRepository.getHandler(handle),
     );
 
-    console.log(handleDetails);
-    if (handleDetails.data.total_count <= 0) {
-      res.send({
-        success: true,
-        status_code: 404,
+    if (hanlderErr) {
+      res.status(hanlderErr.response.status).send({
         error: {
-          message: 'handle not found.',
+          message: hanlderErr.response.statusText,
         },
       });
     }
 
-    // const handleRepos = await axios.get(`${handleDetails.data.repos_url}`, {
-    //   headers: {
-    //     Authorization: 'token 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',
-    //   },
-    // });
+    const [repos, reposErr] = await of(
+      GithubSearchRepository.getRepos(handler.repos_url),
+    );
 
-    // const repos = await octokit.request('GET /search/repositories', {
-    //   q: repo,
-    // });
+    if (reposErr) {
+      res.status(reposErr.response.status).send({
+        error: {
+          message: reposErr.response.statusText,
+        },
+      });
+    }
 
-    // if (!repos.data) {
-    //   res.send('data');
-    // }
+    const repositories = repos.map((repoHanlder) => ({
+      repoName: repoHanlder.name,
+      description: repoHanlder.description,
+      starsCount: repoHanlder.stargazers_count,
+      repoUrl: repoHanlder.html_url,
+    }));
 
-    // const user = await octokit.request('GET /users/{username}', {
-    //   username: 'DeqodeShubhamKaushalya',
-    // });
+    res.status(200).send({
+      ownerName: handler.name,
+      repositories,
+    });
+  } catch (err) {
+    res.status(500).send({
+      error: {
+        message: err.message,
+      },
+    });
+  }
+});
 
-    // res.send(handleRepos.data);
+// Get and store handler details
+app.post('/api/users/:handle/profile', async (req, res) => {
+  try {
+    const { handle } = req.params;
+
+    if (!handle) {
+      res.status(400).send({
+        success: false,
+        error: {
+          message: 'handle is required.',
+        },
+      });
+    }
+
+    // Find handler details from database
+    const [handler, hanlderErr] = await of(
+      GithubSearchRepository.findHandler(handle),
+    );
+
+    if (hanlderErr) {
+      res.status(500).send({
+        error: {
+          message: hanlderErr.message,
+        },
+      });
+    }
+
+    if (!handler) {
+      // Get handler details from GitHub
+      const [gitHandler, gitHandlerErr] = await of(
+        GithubSearchRepository.getHandler(handle),
+      );
+
+      if (gitHandlerErr) {
+        res.status(gitHandlerErr.response.status).send({
+          error: {
+            message: gitHandlerErr.response.statusText,
+          },
+        });
+      }
+
+      const profile = {
+        userName: gitHandler.login,
+        image: gitHandler.avatar_url,
+        imageUrl: gitHandler.html_url,
+        followersCount: gitHandler.followers,
+        followingCount: gitHandler.following,
+        repoCount: gitHandler.public_repos,
+        memberSince_date: gitHandler.created_at,
+      };
+
+      // Save handler info
+      const [addProfile, addProfileErr] = await of(
+        GithubSearchRepository.createProfile({
+          user_name: gitHandler.login,
+          image: gitHandler.avatar_url,
+          image_url: gitHandler.html_url,
+          followers_count: gitHandler.followers,
+          following_count: gitHandler.following,
+          repo_count: gitHandler.public_repos,
+          member_since_date: gitHandler.created_at,
+        }),
+      );
+
+      if (addProfileErr) {
+        res.status(500).send({
+          error: {
+            message: addProfileErr.message,
+          },
+        });
+      }
+
+      return res.status(200).send({
+        profile: profile,
+      });
+    }
+
+    const profile = {
+      userName: handler.user_name,
+      image: handler.image,
+      imageUrl: handler.image_url,
+      followersCount: handler.followers_count,
+      followingCount: handler.following_count,
+      repoCount: handler.repo_count,
+      memberSince_date: handler.member_since_date,
+    };
+
+    res.status(200).send({
+      profile: profile,
+    });
   } catch (err) {
     console.log(err);
-    // res.send({
-    //   success: false,
-    //   status_code: err.status,
-    //   error: {
-    //     message: err.message,
-    //   },
-    // });
+    res.status(500).send({
+      error: {
+        message: err.message,
+      },
+    });
   }
 });
 
