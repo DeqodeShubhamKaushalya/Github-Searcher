@@ -1,10 +1,14 @@
 import { of } from 'await-of';
 import GithubSearchRepository from '../dl/dao/GithubSearchRepository.dao';
+import GitHubProxyAPI from '../utils/services/axiosAPI/gitHubURL';
 import httpStatus from '../constant/constant';
+import { profileLogger } from '../app';
 
 const profile = async (req, res) => {
   try {
     const { handle } = req.params;
+
+    profileLogger.info(req.params);
 
     if (!handle) {
       res.status(httpStatus.NOT_FOUND).send({
@@ -21,7 +25,8 @@ const profile = async (req, res) => {
     );
 
     if (hanlderErr) {
-      res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+      profileLogger.error(hanlderErr.message);
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
         error: {
           message: hanlderErr.message,
         },
@@ -31,11 +36,12 @@ const profile = async (req, res) => {
     if (!handler) {
       // Get handler details from GitHub
       const [gitHandler, gitHandlerErr] = await of(
-        GithubSearchRepository.getHandler(handle),
+        GitHubProxyAPI.getHandler(handle),
       );
 
       if (gitHandlerErr) {
-        res.status(gitHandlerErr.response.status).send({
+        profileLogger.error(gitHandlerErr.response.statusText);
+        return res.status(gitHandlerErr.response.status).send({
           error: {
             message: gitHandlerErr.response.statusText,
           },
@@ -66,13 +72,15 @@ const profile = async (req, res) => {
       );
 
       if (addProfileErr) {
-        res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+        profileLogger.error(addProfileErr.message);
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
           error: {
             message: addProfileErr.message,
           },
         });
       }
 
+      profileLogger.info(profileDetails);
       return res.status(httpStatus.OK).send({
         profile: profileDetails,
       });
@@ -88,11 +96,12 @@ const profile = async (req, res) => {
       memberSince_date: handler.member_since_date,
     };
 
+    profileLogger.info(profileDetails);
     res.status(httpStatus.OK).send({
       profile: profileDetails,
     });
   } catch (err) {
-    console.log(err);
+    profileLogger.error(err.message);
     res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
       error: {
         message: err.message,
