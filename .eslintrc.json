@@ -10,6 +10,8 @@
     "class-methods-use-this": "off",
     "no-await-in-loop": "off",
     "no-continue": "off",
+    "no-use-before-define": "off",
+    "camelcase": "off",
     "no-promise-executor-return": "off",
     "consistent-return": "off",
     "import/no-cycle": [0, { "maxDepth": 2 }]

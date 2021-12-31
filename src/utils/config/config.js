@@ -4,7 +4,7 @@ import convict_format_with_validator from 'convict-format-with-validator';
 convict.addFormat(convict_format_with_validator.ipaddress);
 
 // Define a schema
-var config = convict({
+const config = convict({
   env: {
     doc: 'The application environment.',
     format: ['production', 'development', 'test'],
@@ -72,10 +72,10 @@ var config = convict({
 });
 
 // Load environment dependent configuration
-var env = config.get('env');
+const env = config.get('env');
 config.loadFile('.env');
 
 // Perform validation
 config.validate({ allowed: 'strict' });
 
-module.exports = config;
+export default config;

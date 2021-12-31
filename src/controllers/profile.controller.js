@@ -42,7 +42,7 @@ const profile = async (req, res) => {
         });
       }
 
-      const profile = {
+      const profileDetails = {
         userName: gitHandler.login,
         image: gitHandler.avatar_url,
         imageUrl: gitHandler.html_url,
@@ -74,11 +74,11 @@ const profile = async (req, res) => {
       }
 
       return res.status(httpStatus.OK).send({
-        profile: profile,
+        profile: profileDetails,
       });
     }
 
-    const profile = {
+    const profileDetails = {
       userName: handler.user_name,
       image: handler.image,
       imageUrl: handler.image_url,
@@ -89,7 +89,7 @@ const profile = async (req, res) => {
     };
 
     res.status(httpStatus.OK).send({
-      profile: profile,
+      profile: profileDetails,
     });
   } catch (err) {
     console.log(err);
