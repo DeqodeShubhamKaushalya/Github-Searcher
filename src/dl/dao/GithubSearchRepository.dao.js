@@ -1,18 +1,21 @@
 import axios from 'axios';
 import Handler from '../../db/models/user.model';
+import { configuration } from '../../app';
 
 class GithubSearchRepository {
   constructor() {
     const services = axios.create({
       headers: {
-        Authorization: 'token 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',
+        Authorization: `token ${configuration.gitHub.gitHubAuthToken}`,
       },
     });
     this.axios = services;
   }
 
   static async getHandler(handle) {
-    const handler = await axios.get(`https://api.github.com/users/${handle}`);
+    const handler = await axios.get(
+      `${configuration.gitHub.apiBaseUrl}/users/${handle}`,
+    );
     return handler.data;
   }
 
@@ -27,13 +30,11 @@ class GithubSearchRepository {
     }).select({
       _id: 0,
     });
-
     return findHandler;
   }
 
   static async createProfile(handlerDetails) {
     const handler = await Handler.create(handlerDetails);
-
     return handler;
   }
 }
