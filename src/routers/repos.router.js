@@ -6,4 +6,4 @@ const router = express.Router();
 router.post('/:handle/repositories', reposController.getRepositories);
 router.post('/:handle/profile', profileController.profile);
 
-module.exports = router;
+export default router;

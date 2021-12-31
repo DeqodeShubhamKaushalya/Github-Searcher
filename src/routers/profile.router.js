@@ -4,4 +4,4 @@ import profileController from '../controllers/profile.controller';
 const router = express.Router();
 router.post('/:handle/profile', profileController.profile);
 
-module.exports = router;
+export default router;
