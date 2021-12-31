@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
-import connectionDetails from '../../../index';
+import { configuration } from '../../app';
 
 async function dbConnection() {
   await mongoose.connect(
-    `mongodb://${connectionDetails.DB_USER}:${connectionDetails.DB_PASSWORD}@${connectionDetails.DB_HOST}:${connectionDetails.DB_PORT}/${connectionDetails.DB_NAME}`,
+    `mongodb://${configuration.db.username}:${configuration.db.password}@${configuration.db.host}:${configuration.db.port}/${configuration.db.name}`,
   );
 }
+
 export default dbConnection;
