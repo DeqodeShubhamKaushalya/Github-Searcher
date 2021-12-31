@@ -1,10 +1,13 @@
 import { of } from 'await-of';
-import GithubSearchRepository from '../dl/dao/GithubSearchRepository.dao';
+import GitHubProxyAPI from '../utils/services/axiosAPI/gitHubURL';
 import httpStatus from '../constant/constant';
+import { repoLogger } from '../app';
 
 const getRepositories = async (req, res) => {
   try {
     const { handle } = req.params;
+
+    repoLogger.info(req.params);
 
     if (!handle) {
       res.status(httpStatus.NOT_FOUND).send({
@@ -15,12 +18,11 @@ const getRepositories = async (req, res) => {
       });
     }
 
-    const [handler, hanlderErr] = await of(
-      GithubSearchRepository.getHandler(handle),
-    );
+    const [handler, hanlderErr] = await of(GitHubProxyAPI.getHandler(handle));
 
     if (hanlderErr) {
-      res.status(hanlderErr.response.status).send({
+      repoLogger.error(hanlderErr.response.statusText);
+      return res.status(hanlderErr.response.status).send({
         error: {
           message: hanlderErr.response.statusText,
         },
@@ -28,11 +30,12 @@ const getRepositories = async (req, res) => {
     }
 
     const [repos, reposErr] = await of(
-      GithubSearchRepository.getRepos(handler.repos_url),
+      GitHubProxyAPI.getRepos(handler.repos_url),
     );
 
     if (reposErr) {
-      res.status(reposErr.response.status).send({
+      repoLogger.error(reposErr.response.statusText);
+      return res.status(reposErr.response.status).send({
         error: {
           message: reposErr.response.statusText,
         },
@@ -46,12 +49,16 @@ const getRepositories = async (req, res) => {
       repoUrl: repoHanlder.html_url,
     }));
 
+    repoLogger.info({
+      ownerName: handler.name,
+      repositories,
+    });
     res.status(httpStatus.OK).send({
       ownerName: handler.name,
       repositories,
     });
   } catch (err) {
-    console.log(err);
+    repoLogger.error(err.message);
     res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
       error: {
         message: err.message,
