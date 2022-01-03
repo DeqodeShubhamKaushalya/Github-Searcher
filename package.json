@@ -16,7 +16,6 @@
     "GitHub",
     "API's"
   ],
-  "license": "ISC",
   "dependencies": {
     "await-of": "^3.1.1",
     "axios": "^0.24.0",

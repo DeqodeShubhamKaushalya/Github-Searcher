@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 import config from '../../utils/config/config';
 
-const configuration = config.get();
-
 async function dbConnection() {
   await mongoose.connect(
-    `mongodb://${configuration.db.username}:${configuration.db.password}@${configuration.db.host}:${configuration.db.port}/${configuration.db.name}`,
+    `mongodb://${config.get().db.username}:${config.get().db.password}@${
+      config.get().db.host
+    }:${config.get().db.port}/${config.get().db.name}`,
   );
 }
 

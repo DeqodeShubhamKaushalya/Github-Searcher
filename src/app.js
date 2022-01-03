@@ -1,10 +1,8 @@
 import express from 'express';
-import reposRouter from './routers/repos.router';
-import profileRouter from './routers/profile.router';
+import router from './routers/routes';
 
 const app = express();
 
-app.use('/api/handler', reposRouter);
-app.use('/api/user', profileRouter);
+app.use('/api/handles', router);
 
 export default app;

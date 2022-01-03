@@ -1,14 +1,14 @@
 import { of } from 'await-of';
-import GithubSearchRepository from '../repositories/github.search.repository';
+import GithubSearchRepository from '../repositories/github-search-repository';
 import GitHubProxy from '../utils/axios/gitHubProxy';
 import httpStatus from '../constant/constant';
-import { profileLogger } from '../utils/logger/logger';
+import logger from '../utils/logger/logger';
 
 const profile = async (req, res) => {
   try {
     const { handle } = req.params;
 
-    profileLogger.info({ url: req.originalUrl, parameters: handle });
+    logger.info({ url: req.originalUrl, parameters: handle });
 
     if (!handle) {
       res.status(httpStatus.NOT_FOUND).send({
@@ -25,7 +25,7 @@ const profile = async (req, res) => {
     );
 
     if (hanlderErr) {
-      profileLogger.error(hanlderErr.message);
+      logger.error(hanlderErr.message);
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
         error: {
           message: hanlderErr.message,
@@ -40,7 +40,7 @@ const profile = async (req, res) => {
       );
 
       if (gitHandlerErr) {
-        profileLogger.error(gitHandlerErr.response.statusText);
+        logger.error(gitHandlerErr.response.statusText);
         return res.status(gitHandlerErr.response.status).send({
           error: {
             message: gitHandlerErr.response.statusText,
@@ -64,7 +64,7 @@ const profile = async (req, res) => {
       );
 
       if (addProfileErr) {
-        profileLogger.error(addProfileErr.message);
+        logger.error(addProfileErr.message);
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
           error: {
             message: addProfileErr.message,
@@ -72,18 +72,18 @@ const profile = async (req, res) => {
         });
       }
 
-      profileLogger.info(profileDetails);
+      logger.info(profileDetails);
       return res.status(httpStatus.OK).send({
         profile: profileDetails,
       });
     }
 
-    profileLogger.info(handler);
+    logger.info(handler);
     res.status(httpStatus.OK).send({
       profile: handler,
     });
   } catch (err) {
-    profileLogger.error(err.message);
+    logger.error(err.message);
     res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
       error: {
         message: err.message,
@@ -92,4 +92,66 @@ const profile = async (req, res) => {
   }
 };
 
-export default { profile };
+const getRepositories = async (req, res) => {
+  try {
+    const { handle } = req.params;
+
+    logger.info({ url: req.originalUrl, parameters: handle });
+
+    if (!handle) {
+      res.status(httpStatus.NOT_FOUND).send({
+        success: false,
+        error: {
+          message: 'handle is required.',
+        },
+      });
+    }
+
+    const [handler, hanlderErr] = await of(GitHubProxy.getHandler(handle));
+
+    if (hanlderErr) {
+      logger.error(hanlderErr.response.statusText);
+      return res.status(hanlderErr.response.status).send({
+        error: {
+          message: hanlderErr.response.statusText,
+        },
+      });
+    }
+
+    const [repos, reposErr] = await of(GitHubProxy.getRepos(handler.repos_url));
+
+    if (reposErr) {
+      logger.error(reposErr.response.statusText);
+      return res.status(reposErr.response.status).send({
+        error: {
+          message: reposErr.response.statusText,
+        },
+      });
+    }
+
+    const repositories = repos.map((repoHanlder) => ({
+      repoName: repoHanlder.name,
+      description: repoHanlder.description,
+      starsCount: repoHanlder.stargazers_count,
+      repoUrl: repoHanlder.html_url,
+    }));
+
+    logger.info({
+      ownerName: handler.name,
+      repositories,
+    });
+    res.status(httpStatus.OK).send({
+      ownerName: handler.name,
+      repositories,
+    });
+  } catch (err) {
+    logger.error(err.message);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+      error: {
+        message: err.message,
+      },
+    });
+  }
+};
+
+export default { profile, getRepositories };
