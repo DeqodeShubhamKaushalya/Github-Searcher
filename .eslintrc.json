@@ -10,7 +10,6 @@
     "class-methods-use-this": "off",
     "no-await-in-loop": "off",
     "no-continue": "off",
-    "no-use-before-define": "off",
     "camelcase": "off",
     "no-param-reassign": "off",
     "no-promise-executor-return": "off",

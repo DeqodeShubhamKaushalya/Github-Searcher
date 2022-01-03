@@ -1,9 +1,7 @@
 import convict from 'convict';
-import convict_format_with_validator from 'convict-format-with-validator';
 import dotenv from 'dotenv';
 
 dotenv.config();
-convict.addFormat(convict_format_with_validator.ipaddress);
 
 // Define a schema
 const config = convict({
@@ -17,7 +15,7 @@ const config = convict({
     doc: 'The port to bind.',
     format: 'port',
     default: 3000,
-    env: 'APP_PORT',
+    env: 'PORT',
     arg: 'port',
   },
   db: {
@@ -53,13 +51,15 @@ const config = convict({
     },
   },
   gitHub: {
-    apiBaseUrl: {
-      doc: 'Git hub api url',
-      format: '*',
-      default: '',
-      env: 'GITHUB_API_URL',
+    api: {
+      baseUrl: {
+        doc: 'Git hub api url',
+        format: '*',
+        default: '',
+        env: 'GITHUB_API_URL',
+      },
     },
-    gitHubAuthToken: {
+    authToken: {
       doc: 'Git hub auth token',
       format: '*',
       default: '',

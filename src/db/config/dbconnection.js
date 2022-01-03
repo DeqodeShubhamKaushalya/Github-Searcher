@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
-import { configuration } from '../../app';
+import config from '../../utils/config/config';
+
+const configuration = config.get();
 
 async function dbConnection() {
   await mongoose.connect(

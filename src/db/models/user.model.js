@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 
 const handlerSchema = new Schema(
   {
-    user_name: {
+    userName: {
       type: String,
       required: true,
       unique: true,
@@ -14,19 +14,19 @@ const handlerSchema = new Schema(
     image: {
       type: String,
     },
-    image_url: {
+    imageUrl: {
       type: String,
     },
-    followers_count: {
+    followersCount: {
       type: Number,
     },
-    following_count: {
+    followingCount: {
       type: Number,
     },
-    repo_count: {
+    repoCount: {
       type: Number,
     },
-    member_since_date: {
+    memberSinceDate: {
       type: Date,
     },
   },

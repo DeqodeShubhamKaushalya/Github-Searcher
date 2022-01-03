@@ -1,5 +1,5 @@
 {
-  "name": "cambium",
+  "name": "github-searcher",
   "version": "1.0.0",
   "description": "To display a list of repos belonging to a particular GitHub handle, through APIs.",
   "main": "index.js",
@@ -16,7 +16,6 @@
     "GitHub",
     "API's"
   ],
-  "author": "shubham kaushalya",
   "license": "ISC",
   "dependencies": {
     "await-of": "^3.1.1",
