@@ -1,6 +1,6 @@
 import { of } from 'await-of';
 import GithubSearchRepository from '../repositories/github.search.repository';
-import GitHubProxy from '../utils/services/axios/gitHubURL';
+import GitHubProxy from '../utils/axios/gitHubProxy';
 import httpStatus from '../constant/constant';
 import { profileLogger } from '../utils/logger/logger';
 
