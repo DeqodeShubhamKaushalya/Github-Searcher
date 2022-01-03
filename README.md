@@ -54,7 +54,7 @@ $ npm run start:dev
 
 To get handler repository and handler profile we need to implement below events.
 
-- **HandlerRepositories: api/handler/:handler/repositories**
+- **HandlerRepositories: api/handler/:handle/repositories**
 
   ```
   Payload:
@@ -65,7 +65,7 @@ To get handler repository and handler profile we need to implement below events.
   when serach from hanlder name this event will be emitted.
   ```
 
-- **HandlerProfile: api/user/:handler/profile**
+- **HandlerProfile: api/user/:handle/profile**
 
   ```
   Payload:
