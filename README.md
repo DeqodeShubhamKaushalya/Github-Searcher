@@ -4,12 +4,12 @@
 
 ## Description
 
-To work on one feature of the app - to display a list of repos belonging to a particular GitHub handle, through APIs.
+- In developed feature users have right to access complete details of public repositories also users can view complete profile of a handler by using there name.
 
 ## What we want to achieve
 
-- The user must be able to search for any GitHub repos handle, through the text field on UI. The search must trigger a call to the backend then to GitHub’s API.
-- The user must be able to search for any user with the exact name. If not found, show proper error on UI else, insert the information in the back-end database, and use that information for subsequent APIs request.
+- Users should be able to get all the public repositories with there respective details, using handler name
+- Ability to get complete profile of a handler using handler name
 
 ## Prerequisite
 
@@ -52,5 +52,5 @@ $ npm run start:dev
 
 ## Further Improvements
 
-- Authentication before access any api
-- Authorization for validate each request
+- Authentication layer
+- Ability to see private repositories
