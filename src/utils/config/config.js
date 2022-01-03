@@ -1,6 +1,8 @@
 import convict from 'convict';
 import convict_format_with_validator from 'convict-format-with-validator';
+import dotenv from 'dotenv';
 
+dotenv.config();
 convict.addFormat(convict_format_with_validator.ipaddress);
 
 // Define a schema
@@ -11,17 +13,11 @@ const config = convict({
     default: 'development',
     env: 'NODE_ENV',
   },
-  ip: {
-    doc: 'The IP address to bind.',
-    format: 'ipaddress',
-    default: '127.0.0.1',
-    env: 'IP_ADDRESS',
-  },
   port: {
     doc: 'The port to bind.',
     format: 'port',
     default: 3000,
-    env: 'PORT',
+    env: 'APP_PORT',
     arg: 'port',
   },
   db: {
@@ -29,26 +25,31 @@ const config = convict({
       doc: 'Database host name/IP',
       format: '*',
       default: 'server1.dev.test',
+      env: 'DB_HOST',
     },
     name: {
       doc: 'Database name',
       format: String,
       default: 'users',
+      env: 'DB_NAME',
     },
     username: {
       doc: 'Database user name',
       format: '*',
       default: 'admin',
+      env: 'DB_USER',
     },
     password: {
       doc: 'Database password',
       format: '*',
       default: 'admin',
+      env: 'DB_PASSWORD',
     },
     port: {
       doc: 'The port to bind.',
       format: 'port',
       default: 27017,
+      env: 'DB_PORT',
     },
   },
   gitHub: {
@@ -56,24 +57,16 @@ const config = convict({
       doc: 'Git hub api url',
       format: '*',
       default: '',
+      env: 'GITHUB_API_URL',
     },
     gitHubAuthToken: {
       doc: 'Git hub auth token',
       format: '*',
       default: '',
+      env: 'GIT_HUB_AUTH_TOKEN',
     },
   },
-  admins: {
-    doc: 'Users with write access, or null to grant full access without login.',
-    format: Array,
-    nullable: true,
-    default: null,
-  },
 });
-
-// Load environment dependent configuration
-const env = config.get('env');
-config.loadFile('.env');
 
 // Perform validation
 config.validate({ allowed: 'strict' });
