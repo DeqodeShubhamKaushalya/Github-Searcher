@@ -50,35 +50,7 @@ $ npm run start:dev
 
 - [Postman Collection](https://www.postman.com/collections/e8835d5b8ee1349e1dcc)
 
-## Events
-
-To get handler repository and handler profile we need to implement below events.
-
-- **HandlerRepositories: api/handler/:handle/repositories**
-
-  ```
-  Payload:
-  {
-    handler : string;
-  }
-
-  when serach from hanlder name this event will be emitted.
-  ```
-
-- **HandlerProfile: api/user/:handle/profile**
-
-  ```
-  Payload:
-  {
-    handler : string;
-  }
-
-  To see handler profile when we search from hanlder name this event will be emitted.
-  ```
-
-## Screenshots
-
 ## Further Improvements
 
-- End-to-end Encryption
-- Message Delay and Unavailability
+- Authentication before access any api
+- Authorization for validate each request

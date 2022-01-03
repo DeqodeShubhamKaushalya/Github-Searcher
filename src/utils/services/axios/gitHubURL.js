@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { configuration } from '../../../app';
+import config from '../../config/config';
 
-class GitHubProxyAPI {
+class GitHubProxy {
   constructor() {
     const services = axios.create({
       headers: {
-        Authorization: `token ${configuration.gitHub.gitHubAuthToken}`,
+        Authorization: `token ${config.get().gitHub.authToken}`,
       },
     });
     this.axios = services;
@@ -13,7 +13,7 @@ class GitHubProxyAPI {
 
   static async getHandler(handle) {
     const handler = await axios.get(
-      `${configuration.gitHub.apiBaseUrl}/users/${handle}`,
+      `${config.get().gitHub.api.baseUrl}/users/${handle}`,
     );
     return handler.data;
   }
@@ -23,4 +23,4 @@ class GitHubProxyAPI {
     return repos.data;
   }
 }
-export default GitHubProxyAPI;
+export default GitHubProxy;

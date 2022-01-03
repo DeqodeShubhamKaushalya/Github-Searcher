@@ -1,15 +1,16 @@
-import { app, configuration } from './app';
+import app from './app';
+import config from './utils/config/config';
 import dbConnection from './db/config/dbconnection';
 
-appStart();
-
-// Establish connection
+// Server start
 async function appStart() {
   try {
     await dbConnection();
-    app.listen(configuration.port);
-    console.log(`app listening at port: ${configuration.port}`);
+    app.listen(config.get().port);
+    console.log(`app listening at port: ${config.get().port}`);
   } catch (err) {
     console.error(err);
   }
 }
+
+appStart();

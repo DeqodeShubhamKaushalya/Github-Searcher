@@ -1,13 +1,13 @@
 import { of } from 'await-of';
-import GitHubProxyAPI from '../utils/services/axiosAPI/gitHubURL';
+import GitHubProxy from '../utils/services/axios/gitHubURL';
 import httpStatus from '../constant/constant';
-import { repoLogger } from '../app';
+import { repoLogger } from '../utils/logger/logger';
 
 const getRepositories = async (req, res) => {
   try {
     const { handle } = req.params;
 
-    repoLogger.info(req.params);
+    repoLogger.info({ url: req.originalUrl, parameters: handle });
 
     if (!handle) {
       res.status(httpStatus.NOT_FOUND).send({
@@ -18,7 +18,7 @@ const getRepositories = async (req, res) => {
       });
     }
 
-    const [handler, hanlderErr] = await of(GitHubProxyAPI.getHandler(handle));
+    const [handler, hanlderErr] = await of(GitHubProxy.getHandler(handle));
 
     if (hanlderErr) {
       repoLogger.error(hanlderErr.response.statusText);
@@ -29,9 +29,7 @@ const getRepositories = async (req, res) => {
       });
     }
 
-    const [repos, reposErr] = await of(
-      GitHubProxyAPI.getRepos(handler.repos_url),
-    );
+    const [repos, reposErr] = await of(GitHubProxy.getRepos(handler.repos_url));
 
     if (reposErr) {
       repoLogger.error(reposErr.response.statusText);

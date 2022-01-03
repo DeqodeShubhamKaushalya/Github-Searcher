@@ -1,4 +1,4 @@
-import Handler from '../../db/models/user.model';
+import Handler from '../db/models/user.model';
 
 class GithubSearchRepository {
   static async findHandler(handler) {
