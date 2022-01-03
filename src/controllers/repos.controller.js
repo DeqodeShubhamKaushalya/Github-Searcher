@@ -1,5 +1,5 @@
 import { of } from 'await-of';
-import GitHubProxy from '../utils/services/axios/gitHubURL';
+import GitHubProxy from '../utils/axios/gitHubProxy';
 import httpStatus from '../constant/constant';
 import { repoLogger } from '../utils/logger/logger';
 
