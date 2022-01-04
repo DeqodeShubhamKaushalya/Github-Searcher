@@ -2,7 +2,7 @@ import { of } from 'await-of';
 import GithubSearchRepository from '../repositories/github-search-repository';
 import GitHubProxy from '../utils/axios/gitHubProxy';
 import httpStatus from '../constant/constant';
-import logger from '../utils/logger/logger';
+import logger from '../utils/logger';
 
 const profile = async (req, res) => {
   try {
@@ -50,8 +50,8 @@ const profile = async (req, res) => {
 
       const profileDetails = {
         userName: gitHandler.login,
-        image: gitHandler.avatar_url,
-        imageUrl: gitHandler.html_url,
+        imageUrl: gitHandler.avatar_url,
+        profileUrl: gitHandler.html_url,
         followersCount: gitHandler.followers,
         followingCount: gitHandler.following,
         repoCount: gitHandler.public_repos,
@@ -106,6 +106,8 @@ const getRepositories = async (req, res) => {
         },
       });
     }
+
+    const article = new GitHubProxy();
 
     const [handler, hanlderErr] = await of(GitHubProxy.getHandler(handle));
 

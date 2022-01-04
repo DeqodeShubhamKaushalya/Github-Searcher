@@ -4,12 +4,11 @@
 
 ## Description
 
-- In developed feature users have right to access complete details of public repositories also users can view complete profile of a handler by using there name.
+- We developed a system in which user can access all the information of public repositories and user profile of a specific github handler.
 
 ## What we want to achieve
 
-- Users should be able to get all the public repositories with there respective details, using handler name
-- Ability to get complete profile of a handler using handler name
+- We want to develop a system in which user can easily access all the information of public repositories and also user can access complete profile of a specific git handler.
 
 ## Prerequisite
 
