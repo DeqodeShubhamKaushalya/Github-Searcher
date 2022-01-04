@@ -7,10 +7,10 @@ const password = config.get('db.password');
 const host = config.get('db.host');
 const port = config.get('db.port');
 
-async function connectDb() {
+async function connectDB() {
   await mongoose.connect(
     `mongodb://${username}:${password}@${host}:${port}/${dbname}`,
   );
 }
 
-export default connectDb;
+export default connectDB;
