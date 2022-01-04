@@ -11,7 +11,6 @@ class GitHubProxy {
   }
 
   static async getHandler(handle) {
-    // console.log(handle);
     const handler = await axios.get(
       `${config.get().gitHub.api.baseUrl}/users/${handle}`,
     );

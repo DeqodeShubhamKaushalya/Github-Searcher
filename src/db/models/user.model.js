@@ -11,10 +11,10 @@ const handlerSchema = new Schema(
       lowercase: true,
       trim: true,
     },
-    image: {
+    imageUrl: {
       type: String,
     },
-    imageUrl: {
+    profileUrl: {
       type: String,
     },
     followersCount: {

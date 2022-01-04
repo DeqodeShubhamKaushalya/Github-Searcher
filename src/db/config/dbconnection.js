@@ -1,12 +1,16 @@
 import mongoose from 'mongoose';
 import config from '../../utils/config/config';
 
-async function dbConnection() {
+const dbname = config.get('db.name');
+const username = config.get('db.username');
+const password = config.get('db.password');
+const host = config.get('db.host');
+const port = config.get('db.port');
+
+async function connectDb() {
   await mongoose.connect(
-    `mongodb://${config.get().db.username}:${config.get().db.password}@${
-      config.get().db.host
-    }:${config.get().db.port}/${config.get().db.name}`,
+    `mongodb://${username}:${password}@${host}:${port}/${dbname}`,
   );
 }
 
-export default dbConnection;
+export default connectDb;

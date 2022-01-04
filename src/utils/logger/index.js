@@ -4,9 +4,10 @@ import { createLogger, format, transports } from 'winston';
 const year = moment().format('Y');
 const month = moment().format('MMMM');
 const day = moment().format('DD');
+
 const logger = createLogger({
   transports: new transports.File({
-    filename: `logs/${year}/${month}/${day}/log_${year}_${month}_${day}.log`,
+    filename: `logs/${year}/${month}/${day}/log_${month}_${day}_${year}.log`,
     format: format.combine(
       format.errors({ stack: true }),
       format.timestamp({ format: 'MMM-DD-YYYY HH:mm:ss' }),

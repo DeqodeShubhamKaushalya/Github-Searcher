@@ -1,15 +1,18 @@
 import app from './app';
 import config from './utils/config/config';
-import dbConnection from './db/config/dbconnection';
+import connectDb from './db/config/dbconnection';
+import logger from './utils/logger';
+
+const port = config.get('port');
 
 // Server start
 async function appStart() {
   try {
-    await dbConnection();
-    app.listen(config.get().port);
-    console.log(`app listening at port: ${config.get().port}`);
+    await connectDb();
+    app.listen(port);
+    logger.info(`app listening at port: ${port}`);
   } catch (err) {
-    console.error(err);
+    logger.error(err.message);
   }
 }
 
