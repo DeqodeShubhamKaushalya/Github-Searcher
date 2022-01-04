@@ -8,9 +8,12 @@ const host = config.get('db.host');
 const port = config.get('db.port');
 
 async function connectDB() {
-  await mongoose.connect(
-    `mongodb://${username}:${password}@${host}:${port}/${dbname}`,
-  );
+  const mongoUrl =
+    !username && !password
+      ? `mongodb://${host}:${port}/${dbname}`
+      : `mongodb://${username}:${password}@${host}:${port}/${dbname}`;
+
+  await mongoose.connect(mongoUrl);
 }
 
 export default connectDB;
