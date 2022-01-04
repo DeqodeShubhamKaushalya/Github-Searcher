@@ -1,6 +1,6 @@
 import { of } from 'await-of';
 import GithubSearchRepository from '../repositories/github-search-repository';
-import GitHubProxy from '../utils/axios/gitHubProxy';
+import GitHubProxy from '../utils/axios/github.proxy';
 import httpStatus from '../constant/constant';
 import logger from '../utils/logger';
 
@@ -106,8 +106,6 @@ const getRepositories = async (req, res) => {
         },
       });
     }
-
-    const article = new GitHubProxy();
 
     const [handler, hanlderErr] = await of(GitHubProxy.getHandler(handle));
 
