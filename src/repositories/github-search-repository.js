@@ -3,7 +3,7 @@ import Handler from '../db/models/user.model';
 class GithubSearchRepository {
   static findHandler(handler) {
     return Handler.findOne({
-      user_name: handler,
+      userName: handler,
     }).select({
       _id: 0,
     });
