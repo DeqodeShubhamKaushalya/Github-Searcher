@@ -4,7 +4,6 @@
   "description": "To display a list of repos belonging to a particular GitHub handle, through APIs.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --exec babel-node ./src/server.js",
     "prepare": "husky install",
     "lint": "eslint src/**/*.js "
@@ -16,6 +15,7 @@
     "GitHub",
     "API's"
   ],
+  "author": "Shubham Kaushalya",
   "dependencies": {
     "await-of": "^3.1.1",
     "axios": "^0.24.0",
